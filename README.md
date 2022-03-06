@@ -1,2 +1,7 @@
 # Prometheus-Telegram
- Yet another telegram bot handler for prometheus
+
+It's a simple API to handle alert requests and send them via Telegram.
+
+## Instructions
+
+Coming back later ...
