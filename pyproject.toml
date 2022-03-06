@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "tg-bot-service-sender"
+version = "1.0.0"
+description = "Telegram handler for Prometheus alerts"
+authors = ["Arash Hatami <hatamiarash7@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "3.10.2"
+uvicorn = "0.12.3"
+fastapi = "0.74.0"
+Telethon = "1.21.1"
+httpx = "0.17.1"
+python-multipart = "^0.0.5"
+asyncio = "3.4.3"
+cryptg = "0.2.post2"
+Pillow = "9.0.0"
+loguru = "0.6.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
