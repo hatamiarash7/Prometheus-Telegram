@@ -65,9 +65,9 @@ jobs:
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
 
       - name: Build image
-        working-directory: api
         run: |
           docker build -t ${{ steps.github-image.outputs.lowercase }} --build-arg DATE_CREATED=${{ steps.date.outputs.date }} .
+
       - name: Log into registry ${{ env.REGISTRY }}
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v1.14.1
