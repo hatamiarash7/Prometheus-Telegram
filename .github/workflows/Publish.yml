@@ -1,0 +1,82 @@
+name: Telegram Handler
+
+on:
+  schedule:
+    - cron: "13 13 * * *"
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}/telegram-handler:latest
+
+jobs:
+  Python:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: main
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10.2"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 poetry
+          poetry config virtualenvs.create false
+          poetry install
+      - name: Lint with flake8
+        run: |
+          # stop the build if there are Python syntax errors or undefined names
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+  Github-Registry:
+    name: Github Registry
+    needs: Python
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: main
+
+      - id: github-image
+        uses: ASzc/change-string-case-action@v2
+        with:
+          string: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Get Current Date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+
+      - name: Build image
+        working-directory: api
+        run: |
+          docker build -t ${{ steps.github-image.outputs.lowercase }} --build-arg DATE_CREATED=${{ steps.date.outputs.date }} .
+      - name: Log into registry ${{ env.REGISTRY }}
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v1.14.1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push to ${{ env.REGISTRY }}
+        if: github.event_name != 'pull_request'
+        run: |
+          docker push ${{ steps.github-image.outputs.lowercase }}
