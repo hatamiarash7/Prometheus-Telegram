@@ -146,3 +146,6 @@ Thumbs.db #thumbnail cache on Windows
 
 # telethon sessions
 tg_session*
+
+# other
+.vscode
