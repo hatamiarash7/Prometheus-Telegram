@@ -11,6 +11,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}/telegram-handler:latest
+  IMAGE_NAME_DOCKERHUB: ${{ github.actor }}/telegram-handler:latest
 
 jobs:
   Python:
@@ -44,10 +45,6 @@ jobs:
     name: Github Registry
     needs: Python
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-      id-token: write
 
     steps:
       - name: Checkout repository
@@ -80,3 +77,36 @@ jobs:
         if: github.event_name != 'pull_request'
         run: |
           docker push ${{ steps.github-image.outputs.lowercase }}
+
+  Dockerhub-Registry:
+    name: Dockerhub Registry
+    needs: Python
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: main
+
+      - id: dockerhub-image
+        uses: ASzc/change-string-case-action@v2
+        with:
+          string: ${{ env.IMAGE_NAME_DOCKERHUB }}
+
+      - name: Get Current Date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+
+      - name: Build image
+        run: |
+          docker build -t ${{ steps.dockerhub-image.outputs.lowercase }} --build-arg DATE_CREATED=${{ steps.date.outputs.date }} .
+
+      - name: Log into registry ${{ env.REGISTRY }}
+        if: github.event_name != 'pull_request'
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u ${{ github.actor }} --password-stdin
+
+      - name: Push to ${{ env.REGISTRY }}
+        if: github.event_name != 'pull_request'
+        run: |
+          docker push ${{ steps.dockerhub-image.outputs.lowercase }}
