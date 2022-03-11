@@ -20,7 +20,7 @@ It's a simple API to handle alert requests and send them via Telegram.
         -e TG_API_ID='45491' \
         -e TG_API_HASH='12e2adfabe4fb77970b6bae2823taf92' \
         -e TG_CHAT_ID='-200160323059' \
-        ghcr.io/hatamiarash7/prometheus-telegram/telegram-handler:latest
+        hatamiarash7/telegram-handler:latest
     ```
 
 6. Use [alertmanager](https://prometheus.io/docs/alerting/latest/alertmanager/) to send alerts using webhook to `http://<IP>:8080/get_alerts` URL
