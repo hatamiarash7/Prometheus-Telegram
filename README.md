@@ -4,6 +4,8 @@
 
 It's a simple API to handle alert requests and send them via Telegram.
 
+![sample](.github/tg-sample.jpg)
+
 ## How-to use
 
 1. Create a Telegram bot using [botfather](https://t.me/botfather)
@@ -20,16 +22,18 @@ It's a simple API to handle alert requests and send them via Telegram.
       ...
     ```
 
-5. Build image
+5. Get your `chatid` and fill it in `formatter.py`
+
+6. Build image
 
     ```bash
     docker build -t prom-telegram .
     ```
 
-6. Run image
+7. Run image
 
     ```bash
     docker container run -d -p 8080:8080 prom-telegram
     ```
 
-7. Use [alertmanager](https://prometheus.io/docs/alerting/latest/alertmanager/) to send alerts using webhook to `http://<IP>:8080/get_alerts` URL
+8. Use [alertmanager](https://prometheus.io/docs/alerting/latest/alertmanager/) to send alerts using webhook to `http://<IP>:8080/get_alerts` URL
