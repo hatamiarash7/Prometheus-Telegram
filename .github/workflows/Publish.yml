@@ -41,9 +41,49 @@ jobs:
           # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
+  Scan:
+    name: Scan Docker image
+    needs:
+      - Python
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: main
+
+      - id: dockerhub-image
+        uses: ASzc/change-string-case-action@v2
+        with:
+          string: ${{ env.IMAGE_NAME_DOCKERHUB }}
+
+      - name: Get Current Date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+
+      - name: Build image
+        run: |
+          docker build -t test --build-arg DATE_CREATED=${{ steps.date.outputs.date }} .
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: test
+          format: "template"
+          template: "@/contrib/sarif.tpl"
+          output: "trivy-results.sarif"
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: "trivy-results.sarif"
+
   Github-Registry:
     name: Github Registry
-    needs: Python
+    needs:
+      - Python
+      - Scan
     runs-on: ubuntu-latest
 
     steps:
@@ -80,7 +120,9 @@ jobs:
 
   Dockerhub-Registry:
     name: Dockerhub Registry
-    needs: Python
+    needs:
+      - Python
+      - Scan
     runs-on: ubuntu-latest
 
     steps:
@@ -110,42 +152,3 @@ jobs:
         if: github.event_name != 'pull_request'
         run: |
           docker push ${{ steps.dockerhub-image.outputs.lowercase }}
-
-  Scan:
-    name: Scan Docker image
-    needs:
-      - Github-Registry
-      - Dockerhub-Registry
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          ref: main
-
-      - id: dockerhub-image
-        uses: ASzc/change-string-case-action@v2
-        with:
-          string: ${{ env.IMAGE_NAME_DOCKERHUB }}
-
-      - name: Get Current Date
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
-
-      - name: Build image
-        run: |
-          docker build -t test --build-arg DATE_CREATED=${{ steps.date.outputs.date }} .
-
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: test
-          format: "template"
-          template: "@/contrib/sarif.tpl"
-          output: "trivy-results.sarif"
-
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v1
-        with:
-          sarif_file: "trivy-results.sarif"
