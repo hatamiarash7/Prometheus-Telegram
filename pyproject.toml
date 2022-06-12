@@ -7,7 +7,7 @@ authors = ["Arash Hatami <hatamiarash7@gmail.com>"]
 [tool.poetry.dependencies]
 python = "3.10.5"
 uvicorn = "0.12.3"
-fastapi = "0.74.0"
+fastapi = "0.78.0"
 Telethon = "1.21.1"
 httpx = "0.23.0"
 python-multipart = "^0.0.5"
