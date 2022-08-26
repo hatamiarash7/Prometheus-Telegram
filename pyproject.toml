@@ -2,7 +2,13 @@
 name = "tg-bot-service-sender"
 version = "1.0.0"
 description = "Telegram handler for Prometheus alerts"
+license = "MIT"
 authors = ["Arash Hatami <hatamiarash7@gmail.com>"]
+maintainers = ["Arash Hatami <hatamiarash7@gmail.com>"]
+readme = "README.md"
+homepage = "https://github.com/hatamiarash7/Prometheus-Telegram"
+repository = "https://github.com/hatamiarash7/Prometheus-Telegram"
+documentation = "https://github.com/hatamiarash7/Prometheus-Telegram"
 
 [tool.poetry.dependencies]
 python = "3.10.6"
@@ -16,7 +22,8 @@ cryptg = "0.3.1"
 Pillow = "9.2.0"
 loguru = "0.6.0"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/hatamiarash7/Prometheus-Telegram/issues"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
