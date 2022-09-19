@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tg-bot-service-sender"
-version = "1.0.0"
+version = "1.1.0"
 description = "Telegram handler for Prometheus alerts"
 license = "MIT"
 authors = ["Arash Hatami <hatamiarash7@gmail.com>"]
@@ -14,7 +14,6 @@ documentation = "https://github.com/hatamiarash7/Prometheus-Telegram"
 python = "3.10.6"
 uvicorn = "0.18.3"
 fastapi = "0.81.0"
-Telethon = "1.24.0"
 httpx = "0.23.0"
 python-multipart = "0.0.5"
 asyncio = "3.4.3"
