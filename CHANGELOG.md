@@ -2,7 +2,7 @@
 
 ## 1.1.0
 
-- Remote Telethon, Because we need a useful way to proxy telegram host for bypass filtering
+- Remove Telethon, Because we need a useful way to proxy telegram host for bypass filtering
 - Use legacy Telegram API
 - Add changelog
 - Remove extra contents
