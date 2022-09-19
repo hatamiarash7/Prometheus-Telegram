@@ -10,20 +10,28 @@ It's a simple API to handle alert requests and send them via Telegram.
 
 1. Create a Telegram bot using [botfather](https://t.me/botfather)
 2. Keep `BOT TOKEN` for later
-3. Get your `API ID` and `API Hash` from [Telegram Website](https://core.telegram.org/api/obtaining_api_id)
-4. Get your `chatid` using @@RawDataBot bot ( Just invite it to any group )
-5. Run image with required environment variables
+3. Get your `chatid` using @@RawDataBot bot ( Just invite it to any group )
+4. Run image with required environment variables
 
    ```bash
    docker run -d -p 8080:8080 \
+       -e TG_HOST=https://api.telegram.org \
        -e TG_BOT_TOKEN='291043804:AAGHDLwaXNN2U2oI0uxCR35KsivsxNUqT3o' \
-       -e TG_API_ID='45491' \
-       -e TG_API_HASH='12e2adfabe4fb77970b6bae2823taf92' \
        -e TG_CHAT_ID='-200160323059' \
        hatamiarash7/telegram-handler:latest
    ```
 
-6. Use [alertmanager](https://prometheus.io/docs/alerting/latest/alertmanager/) to send alerts using webhook to `http://<IP>:8080/api/alert` URL
+5. Use [alertmanager](https://prometheus.io/docs/alerting/latest/alertmanager/) to send alerts using webhook to `http://<IP>:8080/api/alert` URL
+
+## Proxy
+
+We have a `TG_HOST` env variables here to bypass any filtering or blocking. You can proxy your custom domain to `https://api.telegram.org` and use it here.
+
+```text
+https://telegram.domain.com -> https://api.telegram.org
+```
+
+There are many ways to do that, just search for it 😃
 
 ---
 
