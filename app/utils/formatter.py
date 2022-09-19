@@ -7,7 +7,7 @@ def formatFiredAlert(severity, date, summary, description):
 
     return schemas.PlainMessageSend(
         chat_id=os.environ['TG_CHAT_ID'],
-        text="{} New alert received {}\n\n**severity** = {}\n**date** = {}\n**summary** = {}\n**description** = {}".format(
+        text="{} New alert received {}\n\n*severity* = {}\n*date* = {}\n*summary* = {}\n*description* = {}".format(
             emoji,
             emoji,
             severity,
@@ -23,7 +23,7 @@ def formatResolvedAlert(severity, date, summary, description):
 
     return schemas.PlainMessageSend(
         chat_id=os.environ['TG_CHAT_ID'],
-        text="{} Problem resolved {}\n\n**severity** = {}\n**date** = {}\n**summary** = {}\n**description** = {}".format(
+        text="{} Problem resolved {}\n\n*severity* = {}\n*date* = {}\n*summary* = {}\n*description* = {}".format(
             emoji,
             emoji,
             severity,
