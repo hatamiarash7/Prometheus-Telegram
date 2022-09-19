@@ -10,7 +10,7 @@ It's a simple API to handle alert requests and send them via Telegram.
 
 1. Create a Telegram bot using [botfather](https://t.me/botfather)
 2. Keep `BOT TOKEN` for later
-3. Get your `chatid` using @@RawDataBot bot ( Just invite it to any group )
+3. Get your **Chat id** using [@BotChatId_bot](https://t.me/BotChatId_bot) ( Or other bots/ways )
 4. Run image with required environment variables
 
    ```bash
