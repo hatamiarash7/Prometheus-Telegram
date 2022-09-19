@@ -11,7 +11,7 @@ app = FastAPI(
     title=settings.PROJECT_NAME,
     description=settings.PROJECT_DESCRIPTION,
     version=settings.PROJECT_VERSION,
-    openapi_url=f'{settings.API_V1_STR}/openapi.json',
+    openapi_url=f'{settings.API_PREFIX}/openapi.json',
 )
 
 
@@ -36,4 +36,4 @@ async def request_middleware(request: Request, call_next):
         finally:
             logger.info("Request ended")
 
-app.include_router(api_router, prefix=settings.API_V1_STR)
+app.include_router(api_router, prefix=settings.API_PREFIX)
