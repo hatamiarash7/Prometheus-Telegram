@@ -32,5 +32,4 @@ async def get_alerts(alert: Request) -> Optional[NoReturn]:
             message = formatResolvedAlert(severity, date, summary, description)
 
         await send_message(message)
-    print(req_info)
     return
