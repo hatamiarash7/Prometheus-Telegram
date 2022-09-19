@@ -1,1 +1,1 @@
-from .user import PlainMessageSend, Alert
+from .user import PlainMessageSend
