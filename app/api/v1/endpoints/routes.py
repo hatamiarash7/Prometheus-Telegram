@@ -15,7 +15,7 @@ async def send_plain_message(message: schemas.PlainMessageSend) -> Optional[NoRe
     return
 
 
-@router.post('/get_alerts', status_code=status.HTTP_200_OK)
+@router.post('/alert', status_code=status.HTTP_200_OK)
 async def get_alerts(alert: Request) -> Optional[NoReturn]:
     req_info = await alert.json()
     for alert in req_info['alerts']:

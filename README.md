@@ -23,7 +23,7 @@ It's a simple API to handle alert requests and send them via Telegram.
        hatamiarash7/telegram-handler:latest
    ```
 
-6. Use [alertmanager](https://prometheus.io/docs/alerting/latest/alertmanager/) to send alerts using webhook to `http://<IP>:8080/get_alerts` URL
+6. Use [alertmanager](https://prometheus.io/docs/alerting/latest/alertmanager/) to send alerts using webhook to `http://<IP>:8080/api/alert` URL
 
 ---
 
