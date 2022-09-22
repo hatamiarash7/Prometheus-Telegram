@@ -17,4 +17,4 @@ async def send_message(message: schemas.PlainMessageSend) -> Optional[NoReturn]:
 
 
 def fixBody(body: string) -> string:
-    return body.replace("_", '\\_').replace("*", '\\*').replace("[", '\\[').replace("(", '\\(').replace(")", '\\)').replace("~", '\\~').replace("`", '\\`').replace(">", '\\>').replace("#", '\\#').replace("+", '\\+').replace("-", '\\-').replace("=", '\\=').replace("|", '\\|').replace("{", '\\{').replace("}", '\\}').replace(".", '\\.').replace("!", '\\!')
+    return body.replace("_", '\\_').replace("*", '\\*').replace("[", '\\[').replace("]", '\\]').replace("(", '\\(').replace(")", '\\)').replace("~", '\\~').replace("`", '\\`').replace(">", '\\>').replace("#", '\\#').replace("+", '\\+').replace("-", '\\-').replace("=", '\\=').replace("|", '\\|').replace("{", '\\{').replace("}", '\\}').replace(".", '\\.').replace("!", '\\!')
