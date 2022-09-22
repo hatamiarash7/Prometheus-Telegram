@@ -13,7 +13,7 @@ async def send_message(message: schemas.PlainMessageSend) -> Optional[NoReturn]:
         "chat_id": message.chat_id,
         "text": fixBody(message.text)
     }
-    print(requests.post(TG_URL, data))
+    print(requests.post(TG_URL, data).content)
 
 
 def fixBody(body: string) -> string:
