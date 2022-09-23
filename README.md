@@ -1,6 +1,6 @@
 # Prometheus-Telegram
 
-[![Telegram Handler](https://github.com/hatamiarash7/Prometheus-Telegram/actions/workflows/Publish.yml/badge.svg)](https://github.com/hatamiarash7/Prometheus-Telegram/actions/workflows/Publish.yml)
+[![Telegram Handler](https://github.com/hatamiarash7/Prometheus-Telegram/actions/workflows/Publish.yml/badge.svg)](https://github.com/hatamiarash7/Prometheus-Telegram/actions/workflows/Publish.yml) ![Docker Image Size (latest semver)](https://img.shields.io/docker/image-size/hatamiarash7/telegram-handler)
 
 It's a simple API to handle alert requests and send them via Telegram.
 
@@ -25,7 +25,7 @@ It's a simple API to handle alert requests and send them via Telegram.
 
 ## Proxy
 
-We have a `TG_HOST` env variables here to bypass any filtering or blocking. You can proxy your custom domain to `https://api.telegram.org` and use it here.
+We have a `TG_HOST` env variables here to bypass any **filtering or blocking**. You can proxy your custom domain to `https://api.telegram.org` and use it here.
 
 ```text
 https://telegram.domain.com -> https://api.telegram.org
