@@ -1,23 +1,24 @@
 name: Telegram Handler
 
 on:
-  schedule:
-    - cron: "13 13 * * *"
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+    tags: ["v*.*.*"]
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}/telegram-handler:latest
-  IMAGE_NAME_DOCKERHUB: ${{ github.actor }}/telegram-handler:latest
+  IMAGE_NAME: ${{ github.repository }}/telegram-handler
+  IMAGE_NAME_DOCKERHUB: ${{ github.actor }}/telegram-handler
 
 jobs:
   Python:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Cancel previous workflow
+        uses: styfle/cancel-workflow-action@0.10.0
+        with:
+          access_token: ${{ secrets.GH_TOKEN }}
+
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
@@ -34,6 +35,7 @@ jobs:
           pip install flake8 poetry
           poetry config virtualenvs.create false
           poetry install
+
       - name: Lint with flake8
         run: |
           # stop the build if there are Python syntax errors or undefined names
@@ -62,9 +64,11 @@ jobs:
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
 
+      - name: Get version
+        run: echo "APP_VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
+
       - name: Build image
-        run: |
-          docker build -t test --build-arg DATE_CREATED=${{ steps.date.outputs.date }} .
+        run: docker build -t test --build-arg DATE_CREATED=${{ steps.date.outputs.date }} .
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
@@ -92,31 +96,35 @@ jobs:
         with:
           ref: main
 
-      - id: github-image
-        uses: ASzc/change-string-case-action@v2
-        with:
-          string: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      - name: Get version
+        run: echo "APP_VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
       - name: Get Current Date
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
 
-      - name: Build image
-        run: |
-          docker build -t ${{ steps.github-image.outputs.lowercase }} --build-arg DATE_CREATED=${{ steps.date.outputs.date }} .
+      - id: github-image
+        uses: ASzc/change-string-case-action@v2
+        with:
+          string: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.APP_VERSION }}
 
-      - name: Log into registry ${{ env.REGISTRY }}
-        if: github.event_name != 'pull_request'
+      - name: Build image
+        run: >
+          docker build
+          -t ${{ steps.github-image.outputs.lowercase }}
+          --build-arg DATE_CREATED=${{ steps.date.outputs.date }}
+          --build-arg VERSION=${{ env.APP_VERSION }}
+          .
+
+      - name: Log into registry Github
         uses: docker/login-action@v2.0.0
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Push to ${{ env.REGISTRY }}
-        if: github.event_name != 'pull_request'
-        run: |
-          docker push ${{ steps.github-image.outputs.lowercase }}
+      - name: Push to Github
+        run: docker push ${{ steps.github-image.outputs.lowercase }}
 
   Dockerhub-Registry:
     name: Dockerhub Registry
@@ -131,24 +139,32 @@ jobs:
         with:
           ref: main
 
-      - id: dockerhub-image
-        uses: ASzc/change-string-case-action@v2
-        with:
-          string: ${{ env.IMAGE_NAME_DOCKERHUB }}
-
       - name: Get Current Date
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
 
+      - name: Get version
+        run: echo "APP_VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
+
+      - id: dockerhub-image
+        uses: ASzc/change-string-case-action@v2
+        with:
+          string: ${{ env.IMAGE_NAME_DOCKERHUB }}:${{ env.APP_VERSION }}
+
       - name: Build image
-        run: |
-          docker build -t ${{ steps.dockerhub-image.outputs.lowercase }} --build-arg DATE_CREATED=${{ steps.date.outputs.date }} .
+        run: >
+          docker build
+          -t ${{ steps.dockerhub-image.outputs.lowercase }}
+          --build-arg DATE_CREATED=${{ steps.date.outputs.date }}
+          --build-arg VERSION=${{ env.APP_VERSION }}
+          .
 
-      - name: Log into registry ${{ env.REGISTRY }}
-        if: github.event_name != 'pull_request'
-        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u ${{ github.actor }} --password-stdin
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Push to ${{ env.REGISTRY }}
+      - name: Push to Docker Hub
         if: github.event_name != 'pull_request'
-        run: |
-          docker push ${{ steps.dockerhub-image.outputs.lowercase }}
+        run: docker push ${{ steps.dockerhub-image.outputs.lowercase }}
