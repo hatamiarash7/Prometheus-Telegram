@@ -125,7 +125,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push to Github
-        run: docker push ${{ steps.github-image.outputs.lowercase }}
+        run: docker push ${{ steps.github-image.outputs.lowercase }} -a
 
   Dockerhub-Registry:
     name: Dockerhub Registry
@@ -168,4 +168,4 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Push to Docker Hub
-        run: docker push ${{ steps.dockerhub-image.outputs.lowercase }}
+        run: docker push ${{ steps.dockerhub-image.outputs.lowercase }} -a
