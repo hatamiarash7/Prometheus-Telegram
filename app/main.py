@@ -1,5 +1,6 @@
 import sys
 import uuid
+import logging
 import loguru
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
@@ -15,6 +16,15 @@ app = FastAPI(
 )
 
 
+class EndpointFilter(logging.Filter):
+    """Filter endpoint logs and ignore health check"""
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        return record.args and len(record.args) >= 3 and record.args[2] != "/health"
+
+
+logging.getLogger("uvicorn.access").addFilter(EndpointFilter())
+
 logger = loguru.logger
 logger.remove()
 logger.add(
@@ -23,17 +33,25 @@ logger.add(
 
 @app.middleware("http")
 async def request_middleware(request: Request, call_next):
-    request_id = str(uuid.uuid4())
+    if request.url.path != "/health":
+        request_id = str(uuid.uuid4())
 
-    with logger.contextualize(request_id=request_id):
-        logger.info("Request started")
+        with logger.contextualize(request_id=request_id):
+            logger.info("Request started")
 
-        try:
-            return await call_next(request)
-        except Exception as ex:
-            logger.error(f"Request failed: {ex}")
-            return JSONResponse(content={"success": False}, status_code=500)
-        finally:
-            logger.info("Request ended")
+            try:
+                return await call_next(request)
+            except Exception as ex:
+                logger.error(f"Request failed: {ex}")
+                return JSONResponse(content={"success": False}, status_code=500)
+            finally:
+                logger.info("Request ended")
+    return await call_next(request)
 
 app.include_router(api_router, prefix=settings.API_PREFIX)
+
+
+# Health check endpoint
+@app.get('/health')
+def health():
+    return {"status": "ok"}
