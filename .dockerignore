@@ -1,0 +1,15 @@
+.git
+.github
+.vscode
+.*ignore
+.gitattributes
+*.md
+
+Makefile
+
+__pycache__
+*.pyc
+
+docker-compose.yml
+Dockerfile
+
