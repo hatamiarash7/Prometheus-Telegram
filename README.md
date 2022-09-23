@@ -1,6 +1,6 @@
 # Prometheus-Telegram
 
-[![Telegram Handler](https://github.com/hatamiarash7/Prometheus-Telegram/actions/workflows/Publish.yml/badge.svg)](https://github.com/hatamiarash7/Prometheus-Telegram/actions/workflows/Publish.yml) ![Docker Image Size (latest semver)](https://img.shields.io/docker/image-size/hatamiarash7/telegram-handler)
+[![Telegram Handler](https://github.com/hatamiarash7/Prometheus-Telegram/actions/workflows/Publish.yml/badge.svg)](https://github.com/hatamiarash7/Prometheus-Telegram/actions/workflows/Publish.yml) ![Docker Image Size (latest semver)](https://img.shields.io/docker/image-size/hatamiarash7/telegram-handler) ![Docker Image Version (latest semver)](https://img.shields.io/docker/v/hatamiarash7/telegram-handler)
 
 It's a simple API to handle alert requests and send them via Telegram.
 
@@ -18,7 +18,7 @@ It's a simple API to handle alert requests and send them via Telegram.
        -e TG_HOST=https://api.telegram.org \
        -e TG_BOT_TOKEN='291043804:AAGHDLwaXNN2U2oI0uxCR35KsivsxNUqT3o' \
        -e TG_CHAT_ID='-200160323059' \
-       hatamiarash7/telegram-handler:latest
+       hatamiarash7/telegram-handler:v1.1.2
    ```
 
 5. Use [alertmanager](https://prometheus.io/docs/alerting/latest/alertmanager/) to send alerts using webhook to `http://<IP>:8080/api/alert` URL
