@@ -1,13 +1,16 @@
 FROM python:3.10.5-slim
 
 ARG DATE_CREATED
+ARG VERSION
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
+LABEL maintainer="Arash Hatami <hatamiarash7@gmail.com>"
 LABEL org.opencontainers.image.created=$DATE_CREATED
+LABEL org.opencontainers.image.version=$VERSION
 LABEL org.opencontainers.image.authors="hatamiarash7"
 LABEL org.opencontainers.image.vendor="hatamiarash7"
-LABEL org.opencontainers.image.title="TG Handler"
+LABEL org.opencontainers.image.title="Telegram Handler"
 LABEL org.opencontainers.image.description="Telegram bot for Prometheus"
 LABEL org.opencontainers.image.source="https://github.com/hatamiarash7/Prometheus-Telegram"
 
