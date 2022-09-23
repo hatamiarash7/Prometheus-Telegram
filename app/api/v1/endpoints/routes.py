@@ -9,7 +9,7 @@ from app.utils import formatFiredAlert, formatResolvedAlert
 router = APIRouter()
 
 
-@router.post('/check', status_code=status.HTTP_200_OK)
+@router.post('/test', status_code=status.HTTP_200_OK)
 async def send_plain_message(message: schemas.PlainMessageSend) -> Optional[NoReturn]:
     await send_message(message)
     return
