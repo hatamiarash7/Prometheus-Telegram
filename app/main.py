@@ -12,7 +12,7 @@ app = FastAPI(
     title=settings.PROJECT_NAME,
     description=settings.PROJECT_DESCRIPTION,
     version=settings.PROJECT_VERSION,
-    openapi_url=f'{settings.API_PREFIX}/openapi.json',
+    openapi_url=f"{settings.API_PREFIX}/openapi.json",
 )
 
 
@@ -28,30 +28,34 @@ logging.getLogger("uvicorn.access").addFilter(EndpointFilter())
 logger = loguru.logger
 logger.remove()
 logger.add(
-    sys.stdout, format="{time} - {level} - ({extra[request_id]}) {message} ", level="DEBUG")
+    sys.stdout,
+    format="{time} - {level} - ({extra[request_id]}) {message} ",
+    level="DEBUG"
+)
 
 
 @app.middleware("http")
 async def request_middleware(request: Request, call_next):
     if request.url.path != "/health":
-        request_id = str(uuid.uuid4())
+        return await call_next(request)
 
-        with logger.contextualize(request_id=request_id):
-            logger.info("Request started")
+    request_id = str(uuid.uuid4())
 
-            try:
-                return await call_next(request)
-            except Exception as ex:
-                logger.error(f"Request failed: {ex}")
-                return JSONResponse(content={"success": False}, status_code=500)
-            finally:
-                logger.info("Request ended")
-    return await call_next(request)
+    with logger.contextualize(request_id=request_id):
+        logger.info("Request started")
+
+        try:
+            response = await call_next(request)
+            logger.info("Request ended")
+            return response
+        except Exception as ex:
+            logger.error(f"Request failed: {ex}")
+            return JSONResponse(content={"success": False}, status_code=500)
 
 app.include_router(api_router, prefix=settings.API_PREFIX)
 
 
 # Health check endpoint
 @app.get('/health')
-def health():
+def health_check():
     return {"status": "ok"}

@@ -1,1 +1,1 @@
-from .formatter import formatFiredAlert, formatResolvedAlert
+from .formatter import format_alert

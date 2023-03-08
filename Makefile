@@ -4,7 +4,7 @@ ifneq (,$(wildcard ./.env))
 endif
 
 
-.PHONY: install lock
+.PHONY: install lock run
 
 install:
 	poetry install

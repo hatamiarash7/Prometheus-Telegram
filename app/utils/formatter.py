@@ -1,34 +1,16 @@
 from app import schemas
 from app.config import settings
 
-
-def formatFiredAlert(severity, date, summary, description):
-    emoji = "\U0001f631"
-
-    return schemas.PlainMessageSend(
-        chat_id=settings.TG_CHAT_ID,
-        text="{} New alert received {}\n\n*severity*: {}\n\n*date*: {}\n\n*summary*: {}\n\n*description*: {}".format(
-            emoji,
-            emoji,
-            severity,
-            date,
-            summary,
-            description
-        )
-    )
+TG_CHAT_ID = settings.TG_CHAT_ID
+FIRE_EMOJI = "\U0001f631"
+RESOLVED_EMOJI = "\U00002705"
 
 
-def formatResolvedAlert(severity, date, summary, description):
-    emoji = "\U00002705"
+def format_alert(fired, severity, date, summary, description):
+    emoji = FIRE_EMOJI if fired else RESOLVED_EMOJI
+    action = "New alert received" if fired else "Problem resolved"
 
     return schemas.PlainMessageSend(
-        chat_id=settings.TG_CHAT_ID,
-        text="{} Problem resolved {}\n\n*severity*: {}\n\n*date*: {}\n\n*summary*: {}\n\n*description*: {}".format(
-            emoji,
-            emoji,
-            severity,
-            date,
-            summary,
-            description
-        )
+        chat_id=TG_CHAT_ID,
+        text=f"{emoji} {action} {emoji}\n\n*severity*: {severity}\n\n*date*: {date}\n\n*summary*: {summary}\n\n*description*: {description}"
     )
