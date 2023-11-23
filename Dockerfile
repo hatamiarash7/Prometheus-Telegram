@@ -1,4 +1,4 @@
-FROM python:3.10.5-slim
+FROM python:slim-bookworm
 
 ARG DATE_CREATED
 ARG VERSION
