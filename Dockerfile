@@ -31,6 +31,6 @@ RUN rm -rf /var/lib/apt/lists/* \
 
 COPY ./ /sender
 
-EXPOSE 8080
+EXPOSE 8127
 
-CMD ["uvicorn", "app.main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "app.main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "8127"]

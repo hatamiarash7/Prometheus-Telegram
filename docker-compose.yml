@@ -2,9 +2,9 @@ version: "3.9"
 
 services:
   tg-h:
-    image: ghcr.io/hatamiarash7/prometheus-telegram/telegram-handler:latest
+    image: hatamiarash7/telegram-handler:v1.2.0
     restart: unless-stopped
     container_name: telegram-handler
     ports:
-      - 8080:8080
+      - 8127:8127
     network_mode: "host"

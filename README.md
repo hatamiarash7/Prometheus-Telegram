@@ -14,14 +14,14 @@ It's a simple API to handle alert requests and send them via Telegram.
 4. Run image with required environment variables
 
    ```bash
-   docker run -d -p 8080:8080 \
+   docker run -d -p 8127:8127 \
        -e TG_HOST=https://api.telegram.org \
        -e TG_BOT_TOKEN='291043804:AAGHDLwaXNN2U2oI0uxCR35KsivsxNUqT3o' \
        -e TG_CHAT_ID='-200160323059' \
-       hatamiarash7/telegram-handler:v1.1.2
+       hatamiarash7/telegram-handler:v1.2.0
    ```
 
-5. Use [alertmanager](https://prometheus.io/docs/alerting/latest/alertmanager/) to send alerts using webhook to `http://<IP>:8080/api/alert` URL
+5. Use [alertmanager](https://prometheus.io/docs/alerting/latest/alertmanager/) to send alerts using webhook to `http://<IP>:8127/api/alert` URL
 
 ## Proxy
 
