@@ -1,4 +1,4 @@
-FROM python:3.10.5-slim
+FROM python:3.14.0rc2-slim
 
 ARG DATE_CREATED
 ARG VERSION
