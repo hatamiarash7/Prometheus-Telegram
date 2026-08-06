@@ -263,8 +263,8 @@ dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 
 [metadata]
 lock-version = "1.1"
-python-versions = "3.10.5"
-content-hash = "358c577428f17c5dec0b557b6f9723fb283c0bf7aa50d25be175252398e22962"
+python-versions = "3.14.7"
+content-hash = "8e8d3b8c4fdf3fc680954028b9f750fac9c90e4afce7991b50f258ca8e568808"
 
 [metadata.files]
 anyio = [
